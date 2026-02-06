@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pi5 Datei-Transfer</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <div class="page">
+    <header class="header">
+      <div>
+        <h1>Pi5 Datei-Transfer</h1>
+        <p>Mac → Pi5 (/mnt)</p>
+      </div>
+      <button id="open-settings" class="btn">Einstellungen</button>
+    </header>
+
+    <main class="grid">
+      <section class="panel">
+        <h2>Quelle (Mac)</h2>
+        <div class="drop">
+          <input id="file-input" type="file" multiple />
+          <input id="dir-input" type="file" webkitdirectory directory />
+          <div class="drop-actions">
+            <button id="pick-files" class="btn">Dateien wählen</button>
+            <button id="pick-dir" class="btn">Ordner wählen</button>
+          </div>
+          <p class="hint">Tipp: Ordnerauswahl funktioniert am besten in Chrome/Edge.</p>
+        </div>
+        <div id="file-list" class="list"></div>
+      </section>
+
+      <section class="panel">
+        <h2>Ziel (Pi5)</h2>
+        <div class="path-row">
+          <input id="remote-path" class="input" type="text" value="{{ config.remote_base }}" />
+          <button id="refresh" class="btn">Aktualisieren</button>
+        </div>
+        <div id="current-path" class="hint"></div>
+        <div class="actions">
+          <button id="mkdir" class="btn">Ordner anlegen</button>
+        </div>
+        <div id="remote-list" class="list"></div>
+      </section>
+    </main>
+
+    <section class="panel">
+      <h2>Transfer</h2>
+      <div class="actions">
+        <button id="start" class="btn primary">Kopieren</button>
+        <span id="status" class="status"></span>
+      </div>
+      <pre id="log" class="log"></pre>
+    </section>
+  </div>
+
+  <dialog id="settings">
+    <form method="dialog" class="settings">
+      <h3>Einstellungen</h3>
+      <label>
+        SSH Host
+        <input id="ssh-host" class="input" type="text" value="{{ config.ssh_host }}" />
+      </label>
+      <label>
+        SSH Port
+        <input id="ssh-port" class="input" type="number" value="{{ config.ssh_port }}" />
+      </label>
+      <label>
+        Remote Basis
+        <input id="remote-base" class="input" type="text" value="{{ config.remote_base }}" />
+      </label>
+      <div class="actions">
+        <button id="save-settings" class="btn primary" value="ok">Speichern</button>
+        <button class="btn" value="cancel">Abbrechen</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

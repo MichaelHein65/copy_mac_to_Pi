@@ -1,0 +1,128 @@
+:root {
+  --bg: #f5f1e9;
+  --ink: #1b1b1b;
+  --accent: #0f5c4f;
+  --accent-2: #f3c969;
+  --panel: #ffffff;
+  --border: #d7cfbf;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: "IBM Plex Sans", "Avenir", "Helvetica Neue", sans-serif;
+  color: var(--ink);
+  background: radial-gradient(circle at 20% 10%, #fff7e1, transparent 50%),
+              radial-gradient(circle at 80% 20%, #e6f3ef, transparent 45%),
+              var(--bg);
+}
+
+.page {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+h1 { margin: 0 0 4px 0; }
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+  margin-bottom: 16px;
+}
+
+.btn {
+  background: var(--accent);
+  color: #fff;
+  border: 0;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.btn.primary {
+  background: #1b3a34;
+}
+
+.input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+.drop {
+  border: 2px dashed var(--border);
+  padding: 12px;
+  border-radius: 12px;
+}
+
+.drop-actions {
+  display: flex;
+  gap: 8px;
+  margin: 8px 0;
+}
+
+.list {
+  margin-top: 10px;
+  max-height: 320px;
+  overflow: auto;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px;
+  background: #fff;
+}
+
+.list .item {
+  padding: 6px 8px;
+  border-radius: 6px;
+}
+
+.list .item.dir { background: #f0f8f5; cursor: pointer; }
+
+.path-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-top: 8px;
+}
+
+.status { margin-left: 8px; }
+
+.log {
+  background: #0f1614;
+  color: #d6f7ea;
+  padding: 12px;
+  border-radius: 8px;
+  min-height: 80px;
+}
+
+#file-input,
+#dir-input { display: none; }
+
+@media (max-width: 900px) {
+  .grid { grid-template-columns: 1fr; }
+}
