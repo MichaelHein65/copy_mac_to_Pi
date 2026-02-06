@@ -2,23 +2,63 @@
 set -e
 
 APP_DIR="/Users/michaelhein/* VSC/02260206 Kopieren/app"
+PID_FILE="/tmp/copy_mac_to_pi.pid"
+LOG_FILE="/tmp/copy_mac_to_pi.log"
+PORT=5055
+
 cd "$APP_DIR"
 
-if [ ! -d ".venv" ]; then
-  python3 -m venv .venv
-fi
+function is_running() {
+  if [ -f "$PID_FILE" ]; then
+    local pid
+    pid=$(cat "$PID_FILE" 2>/dev/null || true)
+    if [ -n "$pid" ] && kill -0 "$pid" 2>/dev/null; then
+      return 0
+    fi
+  fi
+  return 1
+}
 
-source .venv/bin/activate
-pip install -r requirements.txt >/dev/null
+function start_server() {
+  if [ ! -d ".venv" ]; then
+    python3 -m venv .venv
+  fi
+  source .venv/bin/activate
+  pip install -r requirements.txt >/dev/null
 
-# Start server in background
-python app.py >/tmp/copy_mac_to_pi.log 2>&1 &
-SERVER_PID=$!
+  python app.py >"$LOG_FILE" 2>&1 &
+  local pid=$!
+  echo "$pid" > "$PID_FILE"
+  sleep 1
+  echo "Server gestartet (PID: $pid). Log: $LOG_FILE"
+  open "http://localhost:$PORT"
+}
 
-# Give it a moment to start
-sleep 1
+function stop_server() {
+  if is_running; then
+    local pid
+    pid=$(cat "$PID_FILE")
+    kill "$pid" 2>/dev/null || true
+    rm -f "$PID_FILE"
+    echo "Server gestoppt (PID: $pid)"
+  else
+    echo "Kein Server gefunden."
+  fi
+}
 
-# Open browser
-open "http://localhost:5055"
-
-echo "Server läuft (PID: $SERVER_PID). Log: /tmp/copy_mac_to_pi.log"
+case "$1" in
+  stop)
+    stop_server
+    ;;
+  start|"" )
+    if is_running; then
+      echo "Server läuft bereits (PID: $(cat "$PID_FILE")). Öffne Browser..."
+      open "http://localhost:$PORT"
+    else
+      start_server
+    fi
+    ;;
+  *)
+    echo "Usage: ./run.command [start|stop]"
+    ;;
+esac
